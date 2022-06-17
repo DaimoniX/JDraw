@@ -1,5 +1,8 @@
 package jdraw;
 
+import jdraw.brushes.*;
+import jdraw.brushes.pack.BrushInfo;
+import jdraw.brushes.pack.BrushPack;
 import jdraw.ui.*;
 import jdraw.ui.components.controlbar.ControlBar;
 import jdraw.ui.components.toolbar.ToolBar;
@@ -10,7 +13,7 @@ import java.awt.*;
 
 public class JDraw extends JFrame {
     private final static Dimension minimumSize = new Dimension(720, 640);
-    private final static Color areaColor = Color.WHITE;
+    private final static Color areaColor = new Color(0xE5E5E5);
     private final static Color barColor = Color.DARK_GRAY;
 
     public JDraw() {
@@ -21,20 +24,28 @@ public class JDraw extends JFrame {
         setSize(minimumSize);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
-        var loader = new IconLoader();
+        // Create and add all components
+        IconLoader loader = new IconLoader();
 
-        var cBar = new ControlBar();
-        var tBar = new ToolBar(loader);
-        var wArea = new WorkingArea();
+        // Add all brushes and icon to brush pack
+        BrushPack brushPack = new BrushPack();
+        brushPack.add(new BrushInfo(new BasicBrush(), loader.getImage("pen.png")));
+        brushPack.add(new BrushInfo(new EraserBrush(), loader.getImage("eraser.png")));
 
-        cBar.setBackground(barColor);
-        tBar.setBackground(barColor);
-        wArea.setBackground(areaColor);
+        WorkingArea workingArea = new WorkingArea();
 
-        add(cBar, BorderLayout.NORTH);
-        add(tBar, BorderLayout.WEST);
-        add(wArea, BorderLayout.CENTER);
+        ControlBar controlBar = new ControlBar();
+        ToolBar toolBar = new ToolBar(brushPack, workingArea);
 
+        controlBar.setBackground(barColor);
+        toolBar.setBackground(barColor);
+        workingArea.setBackground(areaColor);
+
+        add(controlBar, BorderLayout.NORTH);
+        add(toolBar, BorderLayout.WEST);
+        add(workingArea, BorderLayout.CENTER);
+
+        // Show window
         setVisible(true);
     }
 }

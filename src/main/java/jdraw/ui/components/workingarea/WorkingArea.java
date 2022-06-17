@@ -9,11 +9,11 @@ public class WorkingArea extends JPanel {
     private final PaintArea paintArea;
 
     public WorkingArea() {
+        super();
         paintArea = new PaintArea();
         paintArea.setBackground(Color.WHITE);
         setLayout(null);
-        paintArea.setSize(new Dimension(200, 200));
-        paintArea.setLocation(40, 40);
+        paintArea.setLocation(20, 20);
         add(paintArea);
         WorkingAreaMouseHandler mouseHandler = new WorkingAreaMouseHandler(this);
         addMouseListener(mouseHandler);

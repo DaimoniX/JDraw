@@ -1,8 +1,7 @@
 package jdraw.ui.components.workingarea.paintarea;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
-import java.awt.event.MouseMotionListener;
+import java.awt.*;
+import java.awt.event.*;
 
 class PaintAreaMouseHandler implements MouseListener, MouseMotionListener {
     private final PaintArea paintArea;
@@ -14,17 +13,25 @@ class PaintAreaMouseHandler implements MouseListener, MouseMotionListener {
     // TODO: Implement mouse events
 
     @Override
-    public void mouseClicked(MouseEvent e) {
-
-    }
-
-    @Override
     public void mousePressed(MouseEvent e) {
-
+        paintArea.getBrush().onMousePress(e, paintArea.getImageGraphics(), paintArea.getImage());
+        paintArea.repaint();
     }
 
     @Override
     public void mouseReleased(MouseEvent e) {
+        paintArea.getBrush().onMouseRelease(e, paintArea.getImageGraphics(), paintArea.getImage());
+        paintArea.repaint();
+    }
+
+    @Override
+    public void mouseDragged(MouseEvent e) {
+        paintArea.getBrush().onMouseDrag(e, paintArea.getImageGraphics(), paintArea.getImage());
+        paintArea.repaint();
+    }
+
+    @Override
+    public void mouseClicked(MouseEvent e) {
 
     }
 
@@ -35,11 +42,6 @@ class PaintAreaMouseHandler implements MouseListener, MouseMotionListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
 
     }
 

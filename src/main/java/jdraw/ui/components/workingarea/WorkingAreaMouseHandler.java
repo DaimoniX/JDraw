@@ -7,12 +7,10 @@ import java.awt.event.*;
 
 class WorkingAreaMouseHandler implements MouseListener, MouseMotionListener, MouseWheelListener {
     private final PaintArea paintArea;
-    private final WorkingArea area;
     private boolean isDragging;
     private Point previousPoint;
 
     public WorkingAreaMouseHandler(WorkingArea area) {
-        this.area = area;
         paintArea = area.getPaintArea();
         isDragging = false;
         previousPoint = null;
@@ -28,15 +26,15 @@ class WorkingAreaMouseHandler implements MouseListener, MouseMotionListener, Mou
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        if(e.isShiftDown())
-            movePaintArea(-e.getUnitsToScroll(), 0);
+        if (e.isShiftDown())
+            movePaintArea(-e.getUnitsToScroll() * 2, 0);
         else
-            movePaintArea(0, e.getUnitsToScroll());
+            movePaintArea(0, -e.getUnitsToScroll() * 2);
     }
 
     @Override
     public void mousePressed(MouseEvent e) {
-        if(e.getButton() == 1 && e.isShiftDown() && !isDragging) {
+        if (e.getButton() == 1 && e.isShiftDown() && !isDragging) {
             previousPoint = e.getPoint();
             isDragging = true;
         }
@@ -44,13 +42,13 @@ class WorkingAreaMouseHandler implements MouseListener, MouseMotionListener, Mou
 
     @Override
     public void mouseReleased(MouseEvent e) {
-        if(e.getButton() == 1)
+        if (e.getButton() == 1)
             isDragging = false;
     }
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        if(isDragging) {
+        if (isDragging) {
             movePaintArea(e.getPoint().x - previousPoint.x, e.getPoint().y - previousPoint.y);
             previousPoint = e.getPoint();
         }

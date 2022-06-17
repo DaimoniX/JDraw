@@ -45,11 +45,12 @@ class ToolbarButton extends JButton {
         g2d.setColor(getBackground());
         g2d.fillRect(0, 0, size, size);
 
-        g2d.setColor(getBackground().darker().darker());
-        if(selected) {
+        if (selected) {
+            g2d.setColor(getBackground().darker().darker());
             g2d.fillRoundRect(0, 0, size - 1, size - 1, 20, 20);
         } else if (getModel().isRollover()) {
-            g2d.drawRoundRect(0, 0, size - 1, size - 1, 20, 20);
+            g2d.setColor(getBackground().brighter());
+            g2d.fillRoundRect(0, 0, size - 1, size - 1, 20, 20);
         }
 
         g2d.drawImage(icon, imagePadding, imagePadding, size - imagePadding * 2, size - imagePadding * 2, null);
