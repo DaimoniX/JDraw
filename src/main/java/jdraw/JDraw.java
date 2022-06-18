@@ -33,6 +33,9 @@ public class JDraw extends JFrame {
         brushPack.add(new BrushInfo(new EraserBrush(), loader.getImage("eraser.png")));
         brushPack.add(new BrushInfo(new LineBrush(), loader.getImage("line.png")));
         brushPack.add(new BrushInfo(new RectBrush(), loader.getImage("rect.png")));
+        brushPack.add(new BrushInfo(new EllipseBrush(), loader.getImage("ellipse.png")));
+        brushPack.add(new BrushInfo(new FillBrush(), loader.getImage("fill.png")));
+        brushPack.add(new BrushInfo(new TestBrush(), loader.getPlaceholderImage()));
 
         WorkingArea workingArea = new WorkingArea();
 
