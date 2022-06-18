@@ -5,10 +5,6 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
 public class BasicBrush extends Brush{
-    public BasicBrush() {
-        super();
-    }
-
     private Point point;
 
     @Override
