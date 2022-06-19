@@ -17,22 +17,27 @@ class WorkingAreaMouseHandler implements MouseListener, MouseMotionListener, Mou
     }
 
     private void movePaintArea(int x, int y) {
-        // TODO: add bounds
         Point loc = paintArea.getLocation();
-        loc.x += x;
+        int padding = 30;
         loc.y += y;
-        paintArea.setLocation(loc);
+        loc.x += x;
+
+        if (!(loc.x - padding + paintArea.getWidth() < 0 || loc.y - padding + paintArea.getHeight() < 0
+                || loc.x + padding > paintArea.getParent().getWidth() || loc.y + padding > paintArea.getParent().getHeight())) {
+            paintArea.setLocation(loc);
+        }
     }
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
+        int speed = 4;
         if (e.isControlDown()) {
             paintArea.resize(-e.getUnitsToScroll());
         } else {
             if (e.isShiftDown())
-                movePaintArea(e.getUnitsToScroll() * 2, 0);
+                movePaintArea(e.getUnitsToScroll() * speed, 0);
             else
-                movePaintArea(0, -e.getUnitsToScroll() * 2);
+                movePaintArea(0, -e.getUnitsToScroll() * speed);
         }
     }
 
