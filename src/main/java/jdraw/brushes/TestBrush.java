@@ -14,7 +14,7 @@ public class TestBrush extends Brush {
 
     @Override
     public void onMouseDrag(MouseEvent e, Graphics2D g, BufferedImage img) {
-        if(point != null) {
+        if (point != null) {
             g.setColor(getColor());
             g.drawLine(point.x, point.y, e.getX(), e.getY());
         }

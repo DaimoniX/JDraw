@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-public class BasicBrush extends Brush{
+public class BasicBrush extends Brush {
     private Point point;
 
     @Override
@@ -14,7 +14,7 @@ public class BasicBrush extends Brush{
 
     @Override
     public void onMouseDrag(MouseEvent e, Graphics2D g, BufferedImage img) {
-        if(point != null) {
+        if (point != null) {
             g.setColor(getColor());
             g.drawLine(point.x, point.y, e.getX(), e.getY());
         }
@@ -23,7 +23,7 @@ public class BasicBrush extends Brush{
 
     @Override
     public void onMouseRelease(MouseEvent e, Graphics2D g, BufferedImage img) {
-        if(point != null) {
+        if (point != null) {
             g.setColor(getColor());
             g.drawLine(point.x, point.y, e.getX(), e.getY());
         }

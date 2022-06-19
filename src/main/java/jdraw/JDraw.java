@@ -24,10 +24,21 @@ public class JDraw extends JFrame {
         setSize(minimumSize);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
 
+        // Set Nimbus as look and feel (if possible)
+        for (var lookAndFeelInfo : UIManager.getInstalledLookAndFeels()) {
+            if (lookAndFeelInfo.getName().equals("Nimbus")) {
+                try {
+                    UIManager.setLookAndFeel(lookAndFeelInfo.getClassName());
+                } catch (Exception e) {
+                    System.err.println("Nimbus look and feel not available");
+                }
+            }
+        }
+
         // Create and add all components
         IconLoader loader = new IconLoader();
 
-        // Add all brushes and icon to brush pack
+        // Add all brushes and icons to brush pack
         BrushPack brushPack = new BrushPack();
         brushPack.add(new BrushInfo(new BasicBrush(), loader.getImage("pen.png")));
         brushPack.add(new BrushInfo(new EraserBrush(), loader.getImage("eraser.png")));
@@ -39,8 +50,8 @@ public class JDraw extends JFrame {
 
         WorkingArea workingArea = new WorkingArea();
 
-        ControlBar controlBar = new ControlBar();
-        ToolBar toolBar = new ToolBar(brushPack, workingArea);
+        ControlBar controlBar = new ControlBar(loader, workingArea);
+        ToolBar toolBar = new ToolBar(loader, brushPack, workingArea);
 
         controlBar.setBackground(barColor);
         toolBar.setBackground(barColor);
@@ -51,6 +62,7 @@ public class JDraw extends JFrame {
         add(workingArea, BorderLayout.CENTER);
 
         // Show window
+        setLocationRelativeTo(null);
         setVisible(true);
     }
 }

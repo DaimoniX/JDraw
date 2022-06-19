@@ -1,9 +1,9 @@
-package jdraw.ui.components.toolbar;
+package jdraw.ui.components;
 
 import javax.swing.*;
 import java.awt.*;
 
-class ToolbarButton extends JButton {
+public class IconButton extends JButton {
     private final Image icon;
     private boolean selected;
     private final Dimension preferredSize;
@@ -18,7 +18,7 @@ class ToolbarButton extends JButton {
         repaint();
     }
 
-    public ToolbarButton(Image icon, Color backgroundColor) {
+    public IconButton(Image icon, Color backgroundColor) {
         super("  ");
         setBackground(backgroundColor);
         this.icon = icon;

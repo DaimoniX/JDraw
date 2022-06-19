@@ -26,10 +26,14 @@ class WorkingAreaMouseHandler implements MouseListener, MouseMotionListener, Mou
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        if (e.isShiftDown())
-            movePaintArea(-e.getUnitsToScroll() * 2, 0);
-        else
-            movePaintArea(0, -e.getUnitsToScroll() * 2);
+        if (e.isControlDown()) {
+            paintArea.resize(-e.getUnitsToScroll());
+        } else {
+            if (e.isShiftDown())
+                movePaintArea(e.getUnitsToScroll() * 2, 0);
+            else
+                movePaintArea(0, -e.getUnitsToScroll() * 2);
+        }
     }
 
     @Override

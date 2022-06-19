@@ -12,8 +12,14 @@ public class RectBrush extends Brush implements GhostShape {
     private Rectangle ghost;
     private Point startPoint;
 
-    public Shape getGhost() {
-        return ghost;
+    @Override
+    public void drawGhost(Graphics2D g, int sizeCoefficient) {
+        if (ghost != null) {
+            Rectangle rect = (Rectangle) ghost.clone();
+            rect.setLocation((int) (ghost.getX() * sizeCoefficient / 100), (int) (ghost.getY() * sizeCoefficient / 100));
+            rect.setSize((int) (ghost.getWidth() * sizeCoefficient / 100), (int) (ghost.getHeight() * sizeCoefficient / 100));
+            GhostShape.drawGhost(rect, g);
+        }
     }
 
     @Override
@@ -28,14 +34,16 @@ public class RectBrush extends Brush implements GhostShape {
         int startY = Math.min(startPoint.y, e.getY());
         int sizeX = Math.abs(startPoint.x - e.getX());
         int sizeY = Math.abs(startPoint.y - e.getY());
-        ghost.setLocation(startX, startY);
-        ghost.setSize(sizeX, sizeY);
+        ghost.setRect(startX, startY, sizeX, sizeY);
     }
 
     @Override
     public void onMouseRelease(MouseEvent e, Graphics2D g, BufferedImage img) {
         g.setColor(getColor());
-        g.drawRect(ghost.x, ghost.y, ghost.width, ghost.height);
+        if (e.isShiftDown())
+            g.fillRect(ghost.x, ghost.y, ghost.width, ghost.height);
+        else
+            g.drawRect(ghost.x, ghost.y, ghost.width, ghost.height);
         startPoint = null;
         ghost = null;
     }

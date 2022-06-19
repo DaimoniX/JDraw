@@ -6,11 +6,11 @@ import java.awt.image.BufferedImage;
 import java.util.Queue;
 import java.util.LinkedList;
 
-public class FillBrush extends Brush{
+public class FillBrush extends Brush {
     @Override
     public void onMousePress(MouseEvent e, Graphics2D g, BufferedImage img) {
         int colorToFill = img.getRGB(e.getX(), e.getY());
-        if(getColor().getRGB() == colorToFill)
+        if (getColor().getRGB() == colorToFill)
             return;
         Queue<Point> points = new LinkedList<>();
         points.add(e.getPoint());

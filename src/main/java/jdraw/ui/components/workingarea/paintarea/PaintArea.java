@@ -16,6 +16,8 @@ public class PaintArea extends JPanel {
     private BasicStroke stroke;
     private Color color;
     private GhostShape ghostShape;
+    private final Dimension modifiedSize;
+    private int sizeCoefficient;
 
     public PaintArea() {
         super();
@@ -24,9 +26,11 @@ public class PaintArea extends JPanel {
         addMouseListener(handler);
         addMouseMotionListener(handler);
         size = new Dimension(100, 100);
+        modifiedSize = new Dimension(-1, -1);
         setColor(Color.BLACK);
         stroke = new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
         loadImage(new BufferedImage(512, 512, BufferedImage.TYPE_INT_RGB));
+        clear();
     }
 
     public void loadImage(BufferedImage image) {
@@ -35,13 +39,16 @@ public class PaintArea extends JPanel {
         imageGraphics.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
         getImageGraphics().setStroke(stroke);
         size.setSize(image.getWidth(), image.getHeight());
-        setSize(size);
-        clear();
+        sizeCoefficient = 100;
+        modifiedSize.setSize(size.width * sizeCoefficient / 100, size.height * sizeCoefficient / 100 );
+        setSize(modifiedSize);
+        repaint();
     }
 
     public void clear() {
         imageGraphics.setColor(Color.WHITE);
         imageGraphics.fillRect(0, 0, image.getWidth(), image.getHeight());
+        repaint();
     }
 
     public BufferedImage getImage() {
@@ -58,7 +65,7 @@ public class PaintArea extends JPanel {
 
     public void setColor(Color color) {
         this.color = color;
-        if(brush != null)
+        if (brush != null)
             brush.setColor(color);
     }
 
@@ -80,8 +87,22 @@ public class PaintArea extends JPanel {
         this.brush = brush;
         this.brush.setColor(color);
         ghostShape = null;
-        if(this.brush instanceof GhostShape)
+        if (this.brush instanceof GhostShape)
             ghostShape = (GhostShape) this.brush;
+    }
+
+    public void resize(int units) {
+        sizeCoefficient += units;
+        if (sizeCoefficient < 5)
+            sizeCoefficient = 5;
+        else if (sizeCoefficient > 200)
+            sizeCoefficient = 200;
+        modifiedSize.setSize(size.width * sizeCoefficient / 100, size.height * sizeCoefficient / 100);
+        setSize(modifiedSize);
+    }
+
+    public int getSizeCoefficient() {
+        return sizeCoefficient;
     }
 
     @Override
@@ -89,14 +110,20 @@ public class PaintArea extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         g2d.drawImage(image, 0, 0, getWidth(), getHeight(), null);
-        if(ghostShape != null) {
+        if (ghostShape != null) {
+            ghostShape.drawGhost((Graphics2D) g, sizeCoefficient);
+
+            /*
             Shape ghost = ghostShape.getGhost();
-            if(ghost != null) {
+            if (ghost != null) {
                 g2d.setXORMode(Color.WHITE);
                 g2d.setColor(Color.BLUE);
+                Rectangle bounds = ghost.getBounds();
                 g2d.draw(ghost);
                 g2d.setPaintMode();
             }
+
+             */
         }
     }
 }

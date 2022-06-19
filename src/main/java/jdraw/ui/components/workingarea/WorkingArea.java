@@ -24,11 +24,5 @@ public class WorkingArea extends JPanel {
     public PaintArea getPaintArea() {
         return paintArea;
     }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        // TODO: add scrollbars
-    }
 }
 

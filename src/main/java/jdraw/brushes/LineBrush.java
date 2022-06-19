@@ -22,7 +22,7 @@ public class LineBrush extends Brush implements GhostShape {
 
     @Override
     public void onMouseRelease(MouseEvent e, Graphics2D g, BufferedImage img) {
-        if(startingPoint != null) {
+        if (startingPoint != null) {
             g.setColor(getColor());
             g.drawLine(startingPoint.x, startingPoint.y, e.getX(), e.getY());
         }
@@ -30,7 +30,12 @@ public class LineBrush extends Brush implements GhostShape {
     }
 
     @Override
-    public Shape getGhost() {
-        return line;
+    public void drawGhost(Graphics2D g, int sizeCoefficient) {
+        if (line != null) {
+            Line2D ln = (Line2D) line.clone();
+            ln.setLine(line.getX1() * sizeCoefficient / 100, line.getY1() * sizeCoefficient / 100,
+                    line.getX2() * sizeCoefficient / 100, line.getY2() * sizeCoefficient / 100);
+            GhostShape.drawGhost(ln, g);
+        }
     }
 }

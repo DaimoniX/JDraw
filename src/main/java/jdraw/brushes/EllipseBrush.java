@@ -13,8 +13,14 @@ public class EllipseBrush extends Brush implements GhostShape {
     private Ellipse2D ghost;
     private Point startPoint;
 
-    public Shape getGhost() {
-        return ghost;
+    @Override
+    public void drawGhost(Graphics2D g, int sizeCoefficient) {
+        if (ghost != null) {
+            Ellipse2D el = (Ellipse2D) ghost.clone();
+            el.setFrame(ghost.getX() * sizeCoefficient / 100, ghost.getY() * sizeCoefficient / 100,
+                    ghost.getWidth() * sizeCoefficient / 100, ghost.getHeight() * sizeCoefficient / 100);
+            GhostShape.drawGhost(el, g);
+        }
     }
 
     @Override
@@ -35,7 +41,10 @@ public class EllipseBrush extends Brush implements GhostShape {
     @Override
     public void onMouseRelease(MouseEvent e, Graphics2D g, BufferedImage img) {
         g.setColor(getColor());
-        g.drawOval((int) ghost.getX(), (int) ghost.getY(), (int) ghost.getWidth(), (int) ghost.getHeight());
+        if (e.isShiftDown())
+            g.fillOval((int) ghost.getX(), (int) ghost.getY(), (int) ghost.getWidth(), (int) ghost.getHeight());
+        else
+            g.drawOval((int) ghost.getX(), (int) ghost.getY(), (int) ghost.getWidth(), (int) ghost.getHeight());
         startPoint = null;
         ghost = null;
     }
