@@ -18,17 +18,19 @@ public class PaintArea extends JPanel {
     private GhostShape ghostShape;
     private final Dimension modifiedSize;
     private int sizeCoefficient;
+    private boolean isDashed;
 
     public PaintArea() {
         super();
         setBorder(new LineBorder(Color.GRAY, 1));
+        isDashed = false;
         PaintAreaMouseHandler handler = new PaintAreaMouseHandler(this);
         addMouseListener(handler);
         addMouseMotionListener(handler);
         size = new Dimension(100, 100);
         modifiedSize = new Dimension(-1, -1);
         setColor(Color.BLACK);
-        stroke = new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND);
+        stroke = new BasicStroke(2, BasicStroke.CAP_ROUND, BasicStroke.JOIN_ROUND, 30);
         loadImage(new BufferedImage(512, 512, BufferedImage.TYPE_INT_RGB));
         clear();
     }
@@ -46,6 +48,7 @@ public class PaintArea extends JPanel {
     }
 
     public void clear() {
+        imageGraphics.setPaintMode();
         imageGraphics.setColor(Color.WHITE);
         imageGraphics.fillRect(0, 0, image.getWidth(), image.getHeight());
         repaint();
@@ -73,6 +76,15 @@ public class PaintArea extends JPanel {
         return brush;
     }
 
+    public boolean isDashed() {
+        return isDashed;
+    }
+
+    public void setDashed(boolean value) {
+        isDashed = value;
+        setStrokeWidth(getStrokeWidth());
+    }
+
     public float getStrokeWidth() {
         return stroke.getLineWidth();
     }
@@ -80,7 +92,11 @@ public class PaintArea extends JPanel {
     public void setStrokeWidth(float width) {
         if (width <= 0)
             return;
-        stroke = new BasicStroke(width, stroke.getEndCap(), stroke.getLineJoin());
+        if(isDashed)
+            stroke = new BasicStroke(width, stroke.getEndCap(), stroke.getLineJoin(), stroke.getMiterLimit(), new float[] { Math.max(2, width * 2) }, 0);
+        else
+            stroke = new BasicStroke(width, stroke.getEndCap(), stroke.getLineJoin(), stroke.getMiterLimit());
+        imageGraphics.setStroke(stroke);
     }
 
     public void setBrush(Brush brush) {
@@ -110,20 +126,7 @@ public class PaintArea extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D) g;
         g2d.drawImage(image, 0, 0, getWidth(), getHeight(), null);
-        if (ghostShape != null) {
+        if (ghostShape != null)
             ghostShape.drawGhost((Graphics2D) g, sizeCoefficient);
-
-            /*
-            Shape ghost = ghostShape.getGhost();
-            if (ghost != null) {
-                g2d.setXORMode(Color.WHITE);
-                g2d.setColor(Color.BLUE);
-                Rectangle bounds = ghost.getBounds();
-                g2d.draw(ghost);
-                g2d.setPaintMode();
-            }
-
-             */
-        }
     }
 }

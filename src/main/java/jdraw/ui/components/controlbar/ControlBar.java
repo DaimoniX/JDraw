@@ -16,14 +16,15 @@ import java.util.LinkedList;
 
 public class ControlBar extends HorizontalBar {
     private final LinkedList<JButton> buttons;
+    private final BrushSettings brushSettings;
     private final WorkingArea workingArea;
 
     public ControlBar(IconLoader loader, WorkingArea workingArea) {
         super(50);
         this.workingArea = workingArea;
 
-        JFileChooser fileChooser = new JFileChooser("."); // new File(".")
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", "jpg");
+        JFileChooser fileChooser = new JFileChooser(".");
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", "jpg", "jpeg");
         fileChooser.setFileFilter(filter);
 
         buttons = new LinkedList<>();
@@ -64,10 +65,11 @@ public class ControlBar extends HorizontalBar {
         buttons.add(loadButton);
         buttons.add(saveButton);
 
-        for (var button : buttons) {
+        brushSettings = new BrushSettings(loader, workingArea.getPaintArea());
+        add(brushSettings);
+
+        for (var button : buttons)
             add(button);
-        }
-        // TODO: add brush settings
     }
 
     public void load(String path) throws IOException {
@@ -89,8 +91,10 @@ public class ControlBar extends HorizontalBar {
     @Override
     public void setBackground(Color bg) {
         super.setBackground(bg);
-        if (buttons != null)
+        if (buttons != null && brushSettings != null) {
             for (var button : buttons)
                 button.setBackground(bg);
+            brushSettings.setBackground(bg);
+        }
     }
 }

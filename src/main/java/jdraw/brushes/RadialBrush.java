@@ -4,7 +4,7 @@ import java.awt.*;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 
-public class TestBrush extends Brush {
+public class RadialBrush extends Brush {
     private Point point;
 
     @Override
