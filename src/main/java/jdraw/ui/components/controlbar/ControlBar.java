@@ -15,23 +15,13 @@ import java.io.IOException;
 import java.util.LinkedList;
 
 public class ControlBar extends HorizontalBar {
-    private final LinkedList<JButton> buttons;
+    private final ColorPickerButton pickerButton;
     private final BrushSettings brushSettings;
-    private final WorkingArea workingArea;
 
     public ControlBar(IconLoader loader, WorkingArea workingArea) {
         super(50);
-        this.workingArea = workingArea;
 
-        JFileChooser fileChooser = new JFileChooser(".");
-        FileNameExtensionFilter filter = new FileNameExtensionFilter("Images", "jpg", "jpeg");
-        fileChooser.setFileFilter(filter);
-
-        buttons = new LinkedList<>();
-
-        var pickerButton = new ColorPickerButton(getBackground());
-        var saveButton = new IconButton(loader.getImage("save.png"), getBackground());
-        var loadButton = new IconButton(loader.getImage("load.png"), getBackground());
+        pickerButton = new ColorPickerButton(getBackground());
 
         pickerButton.addActionListener(e -> {
             Color selectedColor = JColorChooser.showDialog(null, "Pick color", workingArea.getPaintArea().getColor());
@@ -41,59 +31,16 @@ public class ControlBar extends HorizontalBar {
             }
         });
 
-        saveButton.addActionListener(e -> {
-            try {
-                if (JFileChooser.APPROVE_OPTION == fileChooser.showSaveDialog(null)) {
-                    save(fileChooser.getSelectedFile().getName());
-                }
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-            }
-        });
-
-        loadButton.addActionListener(e -> {
-            try {
-                if (JFileChooser.APPROVE_OPTION == fileChooser.showOpenDialog(null)) {
-                    load(fileChooser.getSelectedFile().getPath());
-                }
-            } catch (IOException ex) {
-                System.out.println(ex.getMessage());
-            }
-        });
-
-        buttons.add(pickerButton);
-        buttons.add(loadButton);
-        buttons.add(saveButton);
-
         brushSettings = new BrushSettings(loader, workingArea.getPaintArea());
         add(brushSettings);
-
-        for (var button : buttons)
-            add(button);
-    }
-
-    public void load(String path) throws IOException {
-        var in = new FileInputStream(path);
-        var img = ImageIO.read(in);
-        if (img != null)
-            workingArea.getPaintArea().loadImage(img);
-        in.close();
-    }
-
-    public void save(String path) throws IOException {
-        if (!path.matches(".*\\.jpg"))
-            path += ".jpg";
-        var out = new FileOutputStream(path);
-        ImageIO.write(workingArea.getPaintArea().getImage(), "jpeg", out);
-        out.close();
+        add(pickerButton);
     }
 
     @Override
     public void setBackground(Color bg) {
         super.setBackground(bg);
-        if (buttons != null && brushSettings != null) {
-            for (var button : buttons)
-                button.setBackground(bg);
+        if (pickerButton != null && brushSettings != null) {
+            pickerButton.setBackground(bg);
             brushSettings.setBackground(bg);
         }
     }
