@@ -95,13 +95,27 @@ public class JDraw extends JFrame {
     }
 
     public void showCreationDialog() {
-        // TODO: show creation dialogue
-        throw new UnsupportedOperationException();
+        JTextField name = new JTextField("image");
+        SpinnerNumberModel widthModel = new SpinnerNumberModel(512, 1, Integer.MAX_VALUE, 1);
+        SpinnerNumberModel heightModel = new SpinnerNumberModel(512, 1, Integer.MAX_VALUE, 1);
+        JSpinner width = new JSpinner(widthModel);
+        JSpinner height = new JSpinner(heightModel);
+        Object[] message = {
+                "Name:", name,
+                "Width:", width,
+                "Height:", height
+        };
+
+        int option = JOptionPane.showConfirmDialog(null, message, "Login", JOptionPane.OK_CANCEL_OPTION);
+        if (option == JOptionPane.OK_OPTION)
+            createNew(name.getText(), widthModel.getNumber().intValue(), heightModel.getNumber().intValue());
     }
 
     public void createNew(String path, int width, int height) {
         if(width < 1 || height < 1)
             throw new IllegalArgumentException("Dimension can't be less than 1");
+        if (!path.matches(".*\\.jpeg"))
+            path += ".jpeg";
         currentFile = new File(path);
         BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
         image.getGraphics().setColor(Color.WHITE);
