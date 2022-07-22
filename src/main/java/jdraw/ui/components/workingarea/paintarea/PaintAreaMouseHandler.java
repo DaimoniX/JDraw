@@ -26,6 +26,7 @@ class PaintAreaMouseHandler implements MouseListener, MouseMotionListener {
         offsetPoint(e);
         paintArea.getBrush().onMouseRelease(e, paintArea.getImageGraphics(), paintArea.getImage());
         paintArea.repaint();
+        paintArea.setHasChanges(true);
     }
 
     @Override

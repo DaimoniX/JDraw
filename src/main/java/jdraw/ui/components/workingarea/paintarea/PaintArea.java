@@ -129,4 +129,12 @@ public class PaintArea extends JPanel {
         if (ghostShape != null)
             ghostShape.drawGhost((Graphics2D) g, sizeCoefficient);
     }
+
+    private boolean hasChanges = false;
+    public void setHasChanges(boolean value) {
+        hasChanges = value;
+    }
+    public boolean hasChanges() {
+        return hasChanges;
+    }
 }
