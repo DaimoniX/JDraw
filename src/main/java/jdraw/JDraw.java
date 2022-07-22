@@ -95,24 +95,28 @@ public class JDraw extends JFrame {
     }
 
     public void showCreationDialog() {
+        // File name input
         JTextField name = new JTextField("image");
+        // Spinner models
         SpinnerNumberModel widthModel = new SpinnerNumberModel(512, 1, Integer.MAX_VALUE, 1);
         SpinnerNumberModel heightModel = new SpinnerNumberModel(512, 1, Integer.MAX_VALUE, 1);
+        // Spinner fields
         JSpinner width = new JSpinner(widthModel);
         JSpinner height = new JSpinner(heightModel);
+        // Content of dialog
         Object[] message = {
                 "Name:", name,
                 "Width:", width,
                 "Height:", height
         };
 
-        int option = JOptionPane.showConfirmDialog(null, message, "Login", JOptionPane.OK_CANCEL_OPTION);
+        int option = JOptionPane.showConfirmDialog(null, message, "Login", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
         if (option == JOptionPane.OK_OPTION)
             createNew(name.getText(), widthModel.getNumber().intValue(), heightModel.getNumber().intValue());
     }
 
     public void createNew(String path, int width, int height) {
-        if(width < 1 || height < 1)
+        if (width < 1 || height < 1)
             throw new IllegalArgumentException("Dimension can't be less than 1");
         if (!path.matches(".*\\.jpeg"))
             path += ".jpeg";
